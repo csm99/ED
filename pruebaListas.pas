@@ -12,11 +12,11 @@ BEGIN
 	n5:='e';
 	CrearListaVacia(l1);
 	CrearListaVacia(l2);
-
+	writeln;
 	ConstruirLista(n1, l1);
 	ConstruirLista(n2, l1);
 	ConstruirLista(n3, l1);
-	
+
 	ConstruirLista(n4, l2);
 	ConstruirLista(n5, l2);
 
