@@ -12,7 +12,7 @@ BEGIN
 	n5:='e';
 	CrearListaVacia(l1);
 	CrearListaVacia(l2);
-	writeln;
+
 	ConstruirLista(n1, l1);
 	ConstruirLista(n2, l1);
 	ConstruirLista(n3, l1);
@@ -22,8 +22,10 @@ BEGIN
 
 	InsertarFinal('z', l1);
 
-	l3:=nil;
-	{Concatenar(l1,l2, l3);}
+	CrearListaVacia(l3);
+	Concatenar(l1,l2, l3);
+
+	{Copiar(l1, l3);}
 
 	writeln(EsVacia(l3));
 
@@ -36,8 +38,15 @@ BEGIN
 	writeln('Lista 3');
 	ImprimirLista(l3);
 
+	writeln;
+	writeln('GetElem:');
 	GetElemPos(l1, 2, n6);
 	writeln(n6);
+	
+	Destruir(l3);
+	writeln('lista3');
+	ImprimirLista(l3);
+	
 	readln;
 
 END.

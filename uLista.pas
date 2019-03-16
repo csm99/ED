@@ -21,7 +21,8 @@ uses uElem;
 	procedure InsertarFinal(e:tElem; VAR lista:tLista);
 	procedure ImprimirLista(lista:tLista);
 	procedure GetElemPos(lista:tLista; pos:integer; VAR e:tElem);
-	PROCEDURE Copiar(l:tLista; VAR copia:tLista);
+	PROCEDURE Copiar(lista:tLista; VAR copia:tLista);
+	PROCEDURE Destruir(lista:tLista);
 
 
 implementation
@@ -122,23 +123,20 @@ implementation
 
 	procedure Concatenar(l1, l2:tLista; VAR nuevaLista:tLista);
 	var
-		aux:tLista;
+		listaAux, nodo:tLista;
 	begin
 		CrearListaVacia(nuevaLista);
-		if(EsVacia(l1))then begin
-			Copiar(l2, nuevaLista);
+		if(EsVacia(l1))then
+			Copiar(l2, nuevaLista)
 		else if(EsVacia(l2))then
-			Copiar(l1, nuevaLista);
+			Copiar(l1, nuevaLista)
 		else begin
 			Copiar(l1, nuevaLista);
-			Copiar(l2, aux);
-		{
-			nuevaLista:=l1;
-			aux:=nuevaLista;
-			while(aux^.sig <> nil) do
-				aux:=aux^.sig;
-			aux^.sig:= l2;
-		}
+			Copiar(l2, listaAux);
+			nodo:=nuevaLista;
+			while nodo^.sig<>NIL do
+				nodo:=nodo^.sig;
+			nodo^.sig:=listaAux;
 		end;
 	end;
 
@@ -188,12 +186,26 @@ implementation
 	end;
 
 	procedure Copiar(lista:tLista; VAR copia:tLista);
-	var
 	begin
 		CrearListaVacia(copia);
 		WHILE lista <> nil DO BEGIN
-			InsertarFinal(lista.e, copia);
+			InsertarFinal(lista^.e, copia);
+			lista:=lista^.sig;
 		END;
 	end;
+
+	PROCEDURE Destruir(lista:tLista);
+	VAR
+		aux:tLista;
+	BEGIN
+		aux:=lista;
+		WHILE lista <> NIL DO BEGIN
+			lista:=lista^.sig;
+			Dispose(aux);
+			aux:=lista;
+		END;
+	END;
+
+
 
 end.
