@@ -74,12 +74,14 @@ BEGIN
 	ConstruirListaOrd(n4, l2);
 	ConstruirListaOrd(n5, l2);
 
+
+
 	for i:=0 to 4500 do
 		ConstruirListaOrd(random(4500), l1);
 
 	CrearListaOrdVacia(l3);
 
-	Concatenar(l1,l2, l3);
+	{ Concatenar(l1,l2, l3); }
 
 	{ Copiar(l1, l3); }
 
