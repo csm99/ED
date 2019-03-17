@@ -22,7 +22,7 @@ uses uElem;
 	procedure ImprimirLista(lista:tLista);
 	procedure GetElemPos(lista:tLista; pos:integer; VAR e:tElem);
 	PROCEDURE Copiar(lista:tLista; VAR copia:tLista);
-	PROCEDURE Destruir(lista:tLista);
+	PROCEDURE Destruir(VAR lista:tLista);
 
 
 implementation
@@ -54,7 +54,9 @@ implementation
 	procedure Resto(lista:TLista; VAR resto:TLista);
 	begin
 		if(not EsVacia(lista))then
-			resto:=lista^.sig;
+			resto:=lista^.sig
+		else
+			resto:=NIL;
 	end;
 
 	procedure BorrarElemento(elem:TElem; VAR lista:TLista);
@@ -194,7 +196,7 @@ implementation
 		END;
 	end;
 
-	PROCEDURE Destruir(lista:tLista);
+	PROCEDURE Destruir(VAR lista:tLista);
 	VAR
 		aux:tLista;
 	BEGIN
@@ -205,7 +207,5 @@ implementation
 			aux:=lista;
 		END;
 	END;
-
-
-
+	
 end.

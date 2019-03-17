@@ -1,7 +1,7 @@
 unit uElem;
 interface
 	type
-		tElem = char; {cambiar "integer" por el tipo deseado}
+		tElem = integer; {cambiar "integer" por el tipo deseado}
 	function Equals(e1, e2:tElem):boolean;
 	procedure Asignar(VAR eNuevo:tElem; eOriginal:tElem);
 	procedure Mostrar(e:tElem);
