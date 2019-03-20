@@ -1,14 +1,14 @@
 UNIT uListaOrdenada;
 INTERFACE
 	USES uElem;
-	
-	TYPE 
+
+	TYPE
 		tListaOrd = ^tNodo;
 		tNodo = RECORD
 			e:tElem;
 			sig:^tNodo;
 		END;
-	
+
 	PROCEDURE CrearListaOrdVacia(VAR l:tListaOrd);
 	PROCEDURE ConstruirListaOrd(elem:tElem; VAR l:tListaOrd);
 	PROCEDURE PrimerElemento(lista:tListaOrd; VAR elem:tElem);
@@ -22,15 +22,15 @@ INTERFACE
 	procedure ImprimirLista(lista:tListaOrd);
 	PROCEDURE Destruir(VAR lista:tListaOrd);
 	procedure GetElemPos(lista:tListaOrd; pos:integer; VAR e:tElem);
-	
+
 
 IMPLEMENTATION
-	
+
 	PROCEDURE CrearListaOrdVacia(VAR l:tListaOrd);
 	BEGIN
 		l:=NIL;
 	END;
-	
+
 	PROCEDURE ConstruirListaOrd(elem:tElem; VAR l:tListaOrd);
 	VAR
 		aux, nNodo:tListaOrd;
@@ -57,12 +57,12 @@ IMPLEMENTATION
 			aux^.sig:=nNodo;
 		end;
 	END;
-	
+
 	PROCEDURE PrimerElemento(lista:tListaOrd; VAR elem:tElem);
 	BEGIN
 		elem:=lista^.e;
 	END;
-	
+
 	PROCEDURE Resto(lista:tListaOrd; VAR resto:tListaOrd);
 	VAR
 		pAux:tListaOrd;
@@ -72,8 +72,8 @@ IMPLEMENTATION
 		Dispose(resto);
 		resto:=pAux;
 	END;
-		
-	
+
+
 	PROCEDURE Copiar(lista:tListaOrd; VAR copia:tListaOrd);
 	BEGIN
 		CrearListaOrdVacia(copia);
@@ -82,23 +82,20 @@ IMPLEMENTATION
 			lista:=lista^.sig;
 		end;
 	END;
-	
+
 	FUNCTION EsVacia(lista:tListaOrd):boolean;
 	BEGIN
 		EsVacia:= lista = NIL;
 	END;
-	
+
 	FUNCTION Longitud(lista:tListaOrd):integer;
-	VAR
-		contador:integer;
 	BEGIN
-		contador:=0;
-		if(lista = NIL)then
+		if(EsVacia(lista))then
 			Longitud:=0
 		else
-			contador:=contador + Longitud(lista^.sig);
+			Longitud:= 1 + Longitud(lista^.sig);;
 	END;
-	
+
 	PROCEDURE Ultimo(lista:tListaOrd; VAR e:tElem);
 	BEGIN
 		while(lista^.sig<>NIL)do
@@ -124,7 +121,7 @@ IMPLEMENTATION
 			nodo^.sig:=listaAux;
 		end;
 	end;
-	
+
 	PROCEDURE BorrarElemento(elem:tElem; VAR lista:tListaOrd);
 	VAR
 		pAux, pAux2:tListaOrd;
@@ -144,7 +141,7 @@ IMPLEMENTATION
 			end;
 		end;
 	END;
-	
+
 	procedure ImprimirLista(lista:tListaOrd);
 	var
 		aux:tListaOrd;
@@ -155,7 +152,7 @@ IMPLEMENTATION
 			aux:=aux^.sig;
 		end;
 	end;
-	
+
 	PROCEDURE Destruir(VAR lista:tListaOrd);
 	VAR
 		aux:tListaOrd;
@@ -167,7 +164,7 @@ IMPLEMENTATION
 			aux:=lista;
 		END;
 	END;
-	
+
 	procedure GetElemPos(lista:tListaOrd; pos:integer; VAR e:tElem);
 	var
 		aux:tListaOrd;
@@ -184,13 +181,5 @@ IMPLEMENTATION
 				e:=aux^.e;
 		end;
 	end;
-			
+
 END.
-	
-	
-	
-	
-	
-	
-	
-	
