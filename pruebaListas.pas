@@ -4,6 +4,7 @@ var
 	l1, l2, l3: tListaOrd;
 	n1,n2,n3,n4,n5,n6:TElem;
 	i:integer;
+	aux:integer;
 
 BEGIN
 
@@ -76,7 +77,7 @@ BEGIN
 
 
 
-	for i:=0 to 4500 do
+	for i:=0 to 15 do
 		ConstruirListaOrd(random(4500), l1);
 
 	CrearListaOrdVacia(l3);
@@ -107,6 +108,9 @@ BEGIN
 	Destruir(l3);
 	writeln('lista3');
 	ImprimirLista(l3);
+
+	aux:=Longitud(l1);
+	writeln('Longitud L1: ', aux);
 
 	readln;
 

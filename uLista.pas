@@ -51,13 +51,15 @@ implementation
 			e:=lista^.e;
 	end;
 
-	procedure Resto(lista:TLista; VAR resto:TLista);
-	begin
-		if(not EsVacia(lista))then
-			resto:=lista^.sig
-		else
-			resto:=NIL;
-	end;
+	PROCEDURE Resto(lista:tLista; VAR resto:tLista);
+	VAR
+		pAux:tLista;
+	BEGIN
+		Copiar(lista, resto);
+		pAux:=resto^.sig;
+		Dispose(resto);
+		resto:=pAux;
+	END;
 
 	procedure BorrarElemento(elem:TElem; VAR lista:TLista);
 	{ borramos el elemento elem de la lista }
@@ -83,7 +85,15 @@ implementation
 		EsVacia:= lista = nil;
 	end;
 
-	function Longitud(lista:TLista):integer;
+	FUNCTION Longitud(lista:tLista):integer;
+	BEGIN
+		if(EsVacia(lista))then
+			Longitud:=0
+		else
+			Longitud:= 1 + Longitud(lista^.sig);;
+	END;
+
+	function Longitud2(lista:TLista):integer;
 	VAR
 		contador:integer;
 		aux:tLista;
@@ -94,7 +104,7 @@ implementation
 			contador:=contador + 1;
 			aux:=aux^.sig;
 		end;
-		Longitud:=contador;
+		Longitud2:=contador;
 	end;
 
 	procedure Ultimo(lista:tLista; VAR e:TElem);
@@ -207,5 +217,5 @@ implementation
 			aux:=lista;
 		END;
 	END;
-	
+
 end.
