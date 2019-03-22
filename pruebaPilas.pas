@@ -8,11 +8,11 @@ var
 
 BEGIN
 
-	n1:=10;
-	n2:=6;
-	n3:=8;
-	n4:=4;
-	n5:=2;
+	n1:='a';
+	n2:='b';
+	n3:='c';
+	n4:='d';
+	n5:='e';
 	CrearPilaVacia(l1);
 	CrearPilaVacia(l2);
 
@@ -23,10 +23,6 @@ BEGIN
 	Apilar(n4, l2);
 	Apilar(n5, l2);
 
-
-
-	for i:=0 to 15 do
-		Apilar(random(4500), l1);
 
 	CrearPilaVacia(l3);
 
@@ -60,6 +56,10 @@ BEGIN
 	readln;
 
 	Desapilar(l2);
+	Desapilar(l2);
+	Desapilar(l2);
+	Cima(n6, l2);
+	writeln(n6);
 	ImprimirPila(l2);
 
 

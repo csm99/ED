@@ -4,7 +4,7 @@ INTERFACE
 	TYPE
 		tPila = tLista;
 
-	PROCEDURE CrearPilaVacia(p:tPila);
+	PROCEDURE CrearPilaVacia(VAR p:tPila);
 	PROCEDURE Apilar(e:tElem; VAR p:tPila);
 	PROCEDURE Cima(VAR e:tElem; p:tPila);
 	FUNCTION EsVacia(p:tPila):boolean;
@@ -17,7 +17,7 @@ INTERFACE
 
 IMPLEMENTATION
 
-	PROCEDURE CrearPilaVacia(p:tPila);
+	PROCEDURE CrearPilaVacia(VAR p:tPila);
 	BEGIN
 		p:=NIL;
 	END;
@@ -40,9 +40,15 @@ IMPLEMENTATION
 	PROCEDURE Desapilar(VAR p:tPila);
 	VAR
 		elem:tElem;
+		aux:tPila;
 	BEGIN
-		Cima(elem, p);
-		uLista.BorrarElemento(elem, p);
+		if not EsVacia(p) then begin
+			{Cima(elem, p);}
+			aux:=p;
+			p:=p^.sig;
+			Dispose(aux);
+			{uLista.BorrarElemento(elem, p);}
+		end;
 	END;
 
 	PROCEDURE Copiar(pila:tPila; VAR copia:tPila);
@@ -63,7 +69,7 @@ IMPLEMENTATION
 
 	FUNCTION Longitud(p:tPila):integer;
 	BEGIN
-		uLista.Longitud(p);
+		Longitud:=uLista.Longitud(p);
 	END;
 
 END.
