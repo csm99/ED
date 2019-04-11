@@ -6,6 +6,7 @@ interface
 	procedure Asignar(VAR eNuevo:tElem; eOriginal:tElem);
 	procedure Mostrar(e:tElem);
 	procedure Leer(VAR e:tElem);
+	function Minimo(e1, e2:tElem):tElem;
 
 implementation
 		function Equals(e1, e2:tElem):boolean;
@@ -28,4 +29,13 @@ implementation
 			readln(e);
 		end;
 
+		function Minimo(e1, e2:tElem):tElem;
+		begin
+			if e1 < e2 then
+				Minimo:=e1
+			else if e2 < e1 then
+				Minimo:=e2
+			else
+				Minimo:=e1;
+		end;
 end.

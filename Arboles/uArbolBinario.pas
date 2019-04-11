@@ -17,6 +17,11 @@ INTERFACE
 	FUNCTION EsVacio(a:tArbin):boolean;
 	FUNCTION Pertenece(e:tElem; a:tArbin):boolean;
 	FUNCTION Igual(a1, a2:tArbin):boolean;
+	FUNCTION Profundidad(a:tArbin):integer;
+	function NivelElemento(e:tElem; a:tArbin):integer;
+	function NumeroNodos(a:tArbin):integer;
+	function Compensado(a:tArbin):boolean;
+	function Equilibrado(a:tArbin):boolean;
 	PROCEDURE Imprimir(a:tArbin);
 
 IMPLEMENTATION
@@ -89,6 +94,7 @@ type
 		end;
 	end;
 
+
 	PROCEDURE Copiar(c:tCola; VAR copia:tCola);
 	VAR
 		pAux, pNuevo:tPtr;
@@ -103,6 +109,28 @@ type
 				pAux:=pAux^.sig;
 			end;
 		end;
+	end;
+
+	function Minimo(e1, e2:integer):integer;
+	begin
+		if e1 < e2 then
+			Minimo:=e1
+		else if e2 < e1 then
+			Minimo:=e2
+		else
+			Minimo:=e1;
+	end;
+
+	procedure ImprimirCola(c:tCola);
+	var
+		aux:tCola;
+	begin
+		aux:=c;
+		while (aux.principio <> NIL) do begin
+			write(aux.principio^.e^.r,' ');
+			aux.principio:=aux.principio^.sig;
+		end;
+		writeln;
 	end;
 
 
@@ -149,26 +177,92 @@ type
 	begin
 		encontrado:=False;
 		pAux:=a;
-		while (not encontrado) and (pAux <> NIL) do begin
-			if(Equals(e,a^.r))then
+		if not EsVacio(a) then begin
+		{while (not encontrado) and (pAux <> NIL) do begin}
+			if(Equals(e,pAux^.r))then
 				encontrado:=true
 			else
-				encontrado := Pertenece(e, a^.izq) or Pertenece(e, a^.der);
+				encontrado := Pertenece(e, pAux^.izq) or Pertenece(e, pAux^.der);
 		end;
 		Pertenece:=encontrado;
 	end;
 
 	FUNCTION Igual(a1, a2:tArbin):boolean;
 	begin
-		if not EsVacio(a1) and not EsVacio(a2)then begin
-			if(Equals(a1^.r, a2^.r))then
-				Igual := true
-			else
-				Igual := Igual(a1^.izq, a2^.izq) and Igual(a1^.der, a2^.der);
+		if EsVacio(a1) and EsVacio(a2) then
+			Igual:=true
+		else if EsVacio(a1) or EsVacio(a2) then
+			Igual:=false
+		else begin
+			Igual := Equals(a1^.r, a2^.r) and Igual(a1^.izq, a2^.izq) and Igual(a1^.der, a2^.der);
 		end;
 
 
 	end;
+
+	FUNCTION Profundidad(a:tArbin):integer;
+	var
+		profundidad1, profundidad2:integer;
+	BEGIN
+		if EsVacio(a) then
+			Profundidad:=0
+		ELSE BEGIN
+			profundidad1:=Profundidad(a^.izq);
+			profundidad2:=Profundidad(a^.der);
+			if(profundidad1 > profundidad2) then
+				Profundidad:=profundidad1 + 1
+			else if (profundidad2 > profundidad1) then
+				Profundidad:=profundidad2 + 1
+			else
+				Profundidad:=profundidad1 + 1;
+		END;
+	END;
+
+	function NivelElemento(e:tElem; a:tArbin):integer;
+	begin
+		if(Pertenece(e, a))then begin
+			if EsVacio(a) then
+				NivelElemento:=0
+			else if uElem.Equals(e, a^.r) then
+				NivelElemento:=1
+			else begin
+				if EsVacio(a^.izq) and not EsVacio(a^.der) then
+					NivelElemento:= 1 + NivelElemento(e, a^.der)
+				else if EsVacio(a^.der) and not EsVacio(a^.izq) then
+					NivelElemento:= 1 + NivelElemento(e, a^.izq)
+				else
+					NivelElemento:= 1 + Minimo(NivelElemento(e, a^.izq), NivelElemento(e, a^.der));
+			end;
+		end;
+	end;
+
+
+	function NumeroNodos(a:tArbin):integer;
+	begin
+		if EsVacio(a) then
+			NumeroNodos:=0
+		else
+			NumeroNodos:= 1 + NumeroNodos (a^.izq) + NumeroNodos (a^.der);
+	end;
+
+	function Compensado(a:tArbin):boolean;
+	begin
+		Compensado:= NumeroNodos(a^.izq) = NumeroNodos(a^.der);
+	end;
+
+	function Equilibrado(a:tArbin):boolean;
+	VAR
+		nodos:integer;
+	begin
+		if EsVacio(a) then
+			Equilibrado:=true
+		else begin
+			Equilibrado:= Compensado(a) and Equilibrado(a^.izq) and Equilibrado(a^.der);
+		end;
+	end;
+
+	{ ------------------------------ }
+
 
 	PROCEDURE Imprimir(a:tArbin);
 	VAR
@@ -194,17 +288,19 @@ type
 				while not EsVacia(cAux2) do begin
 					Insertar(nodo^.izq, cAux);
 					Insertar(nodo^.der, cAux);
+					{
 					if(nodo^.izq <> NIL) then
 						write(nodo^.izq^.r, ' ');
 					if(nodo^.der <> NIL) then
 						write(nodo^.der^.r, ' ');
+					}
 					Eliminar(cAux2);
 					if not EsVacia(cAux2)then
 						Primero(nodo,cAux2)
 					else
 						nodo:=NIL;
 				end;
-				writeln;
+				ImprimirCola(cAux);
 				Primero(nodo, cAux);
 				while (not EsVacia(cAux)) and (not EsVacio(nodo)) do begin
 					Insertar(nodo^.izq, cAux2);
@@ -219,10 +315,12 @@ type
 					else
 						nodo:=NIL;
 				end;
-				writeln;
+				ImprimirCola(cAux2);
 			end;
+			writeln;
 		end;
 	end;
+
 
 
 
