@@ -23,6 +23,7 @@ uses uElem;
 	procedure GetElemPos(lista:tLista; pos:integer; VAR e:tElem);
 	PROCEDURE Copiar(lista:tLista; VAR copia:tLista);
 	PROCEDURE Destruir(VAR lista:tLista);
+	FUNCTION SonIguales(l1,l2:tLista):boolean;
 
 
 implementation
@@ -217,5 +218,26 @@ implementation
 			aux:=lista;
 		END;
 	END;
+
+	FUNCTION SonIguales(l1,l2:tLista):boolean;
+	var
+		aux1,aux2:tLista;
+		iguales:boolean;
+	begin
+		aux1:=l1;
+		aux2:=l2;
+		iguales:=true;
+		while (aux1<>nil) and (aux2 <> nil) and (aux1^.e = aux2^.e) do begin
+			aux1:=aux1^.sig;
+			aux2:=aux2^.sig;
+		end;
+		if(aux1 = NIL) and (aux2 = nil)then
+			iguales:=true
+		else
+			iguales:=false;
+		SonIguales:=iguales;
+	end;
+
+
 
 end.
