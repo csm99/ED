@@ -22,6 +22,9 @@ INTERFACE
 	function NumeroNodos(a:tArbin):integer;
 	function Compensado(a:tArbin):boolean;
 	function Equilibrado(a:tArbin):boolean;
+	procedure InsertarHijoIzq(hijo:tArbin; VAR a:tArbin);
+	procedure InsertarHijoDer(hijo:tArbin; VAR a:tArbin);
+	function EsHoja(a:tArbin):boolean;
 	PROCEDURE Imprimir(a:tArbin);
 
 IMPLEMENTATION
@@ -44,6 +47,25 @@ type
 		EsVacia:= (c.principio = NIL) and (c.final = NIL);
 	end;
 
+	function ElementosVacios(c:tCola):boolean;
+	var
+		vacio:boolean;
+		aux:tPtr;
+	begin
+		if EsVacia(c) then
+			ElementosVacios:=true
+		else begin
+			vacio:=true;
+			aux:=c.principio;
+			while (aux <> nil) and vacio do begin
+				if(aux^.e^.r <> -1) then
+					vacio:=false;
+				aux:=aux^.sig;
+			end;
+			ElementosVacios:=vacio;
+		end;
+	end;
+
 	PROCEDURE CrearColaVacia(VAR c:tCola);
 	begin
 		c.principio := NIL;
@@ -53,10 +75,12 @@ type
 	PROCEDURE Insertar(e:tarbin; VAR c:tCola);
 	VAR
 		p:tPtr;
+		aux:tArbin;
 	begin
 		if(EsVacio(e))then begin
-			ConstruirArbolBin(NIL, NIL, -1, e);
+			ConstruirArbolBin(NIL, NIL, -1, aux);
 			{-1 si es una rama VACÍA}
+			e:=aux;
 		end;
 		if(EsVacia(c))then begin
 			new(p);
@@ -127,7 +151,10 @@ type
 	begin
 		aux:=c;
 		while (aux.principio <> NIL) do begin
-			write(aux.principio^.e^.r,' ');
+			if(aux.principio^.e^.r = -1)then
+				write('.')
+			else
+				write(aux.principio^.e^.r,' ');
 			aux.principio:=aux.principio^.sig;
 		end;
 		writeln;
@@ -146,7 +173,7 @@ type
 	begin
 		new(a);
 		a^.izq:=izq;
-		a^.der:=DEr;
+		a^.der:=der;
 		Asignar(a^.r, e);
 	end;
 
@@ -261,6 +288,32 @@ type
 		end;
 	end;
 
+	procedure InsertarHijoIzq(hijo:tArbin; VAR a:tArbin);
+	begin
+		if (not EsVacio(a)) and (Profundidad(a) <= 2) then
+			a^.izq:=hijo;
+	end;
+
+	procedure InsertarHijoDer(hijo:tArbin; VAR a:tArbin);
+	begin
+		if (not EsVacio(a)) and (Profundidad(a) <= 2) then
+			a^.der:=hijo;
+	end;
+
+	procedure SetRaiz(e:tElem; VAR a:tArbin);
+	begin
+		if not EsVacio(a) then
+			a^.r:=e;
+	end;
+
+	function EsHoja(a:tArbin):boolean;
+	begin
+		if EsVacio(a) then
+			EsHoja:=false
+		else
+			EsHoja:= (a^.izq = nil) and (a^.der = nil);
+	end;
+
 	{ ------------------------------ }
 
 
@@ -268,56 +321,72 @@ type
 	VAR
 		cAux, cAux2:tCola;
 		nodo:tArbin;
+		prof, i, j:integer;
 	begin
 		CrearColaVacia(cAux);
 		CrearColaVacia(cAux2);
+		prof:=Profundidad(a);
+				writeln(prof);
 		if not EsVacio(a) then begin
+			for i:=1 to prof do
+				write(' ');
+			prof:=prof-1;
 			Mostrar(a^.r);
 			Insertar(a^.izq, cAux);
 			Insertar(a^.der, cAux);
 			Copiar(cAux, cAux2);
+			for i:=1 to prof do
+				write(' ');
+			prof:=prof-1;
 			while not EsVacia(cAux) do begin
 				Primero(nodo,cAux);
 				if not EsVacio(nodo) then
-					write(nodo^.r, ' ');
+					if nodo^.r = -1 then
+						write('.')
+					else
+						write(nodo^.r, ' ');
 				Eliminar(cAux);
 			end;
 			writeln;
-			while (not EsVacia(cAux2)) and (not EsVacio(nodo)) do begin
+			j:=1;
+			while (not ElementosVacios(cAux2)) do begin
 				Primero(nodo,cAux2);
 				while not EsVacia(cAux2) do begin
 					Insertar(nodo^.izq, cAux);
 					Insertar(nodo^.der, cAux);
-					{
-					if(nodo^.izq <> NIL) then
-						write(nodo^.izq^.r, ' ');
-					if(nodo^.der <> NIL) then
-						write(nodo^.der^.r, ' ');
-					}
 					Eliminar(cAux2);
 					if not EsVacia(cAux2)then
 						Primero(nodo,cAux2)
 					else
 						nodo:=NIL;
 				end;
+				j:=j-1;
+				for i:=1 to prof-j do
+					write(' ');
+				prof:=prof-1;
 				ImprimirCola(cAux);
 				Primero(nodo, cAux);
 				while (not EsVacia(cAux)) and (not EsVacio(nodo)) do begin
 					Insertar(nodo^.izq, cAux2);
 					Insertar(nodo^.der, cAux2);
-					if(nodo^.izq <> NIL) then
-						write(nodo^.izq^.r, ' ');
-					if(nodo^.der <> NIL) then
-						write(nodo^.der^.r, ' ');
 					Eliminar(cAux);
 					if not EsVacia(cAux)then
 						Primero(nodo,cAux)
 					else
 						nodo:=NIL;
 				end;
+				for i:=1 to prof-j do
+					write(' ');
+				prof:=prof-1;
+				//writeln('cola');
 				ImprimirCola(cAux2);
+				//if(ElementosVacios(cAux2))then
+					//CrearColaVacia(cAux2);
+				//writeln(ElementosVacios(cAux2));
+				//writeln(EsVacia(caux2), EsVacio(nodo));
 			end;
 			writeln;
+
 		end;
 	end;
 

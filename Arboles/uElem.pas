@@ -7,6 +7,8 @@ interface
 	procedure Mostrar(e:tElem);
 	procedure Leer(VAR e:tElem);
 	function Minimo(e1, e2:tElem):tElem;
+	function EsMayor(e1, e2:tElem):boolean;
+	function EsMenor(e1, e2:tElem):boolean;
 
 implementation
 		function Equals(e1, e2:tElem):boolean;
@@ -37,5 +39,15 @@ implementation
 				Minimo:=e2
 			else
 				Minimo:=e1;
+		end;
+
+		function EsMayor(e1, e2:tElem):boolean;
+		begin
+			EsMayor:= e1 > e2;
+		end;
+
+		function EsMenor(e1, e2:tElem):boolean;
+		begin
+			EsMenor:= e1 < e2;
 		end;
 end.
