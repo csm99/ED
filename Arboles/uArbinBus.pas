@@ -43,22 +43,23 @@ IMPLEMENTATION
 				HijoDerecho(der, a);
 				if uElem.EsMenor(e,r) then begin
 					Insertar(e, izq);
-					if EsHoja(izq) then
+					if EsHoja(izq) then begin
 						InsertarHijoIzq(izq, a);
+					end;
 				end
 				else if uElem.EsMayor(e,r) then begin
 					Insertar(e, der);
-					if EsHoja(der) then
+					if EsHoja(der) then begin
 						InsertarHijoDer(der, a);
+					end;
 				end;
 			end;
 		end;
-		Imprimir(a);
 	end;
 
 	procedure HijoIzquierdo(VAR izq:tArbinBus; a:tArbinBus);
 	begin
-		uArbolBinario.HijoDerecho(izq, a);
+		uArbolBinario.HijoIzquierdo(izq, a);
 	end;
 
 	procedure HijoDerecho(VAR der:tArbinBus; a:tArbinBus);

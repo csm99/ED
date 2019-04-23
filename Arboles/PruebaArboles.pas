@@ -3,6 +3,7 @@ USES uArbinBus, uElem;
 VAR
 	a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13, aux, arbol1, arbol2, arbol3:tArbinBus;
 	e1,e2,e3,e4,e5,e6,e7:tElem;
+	i:integer;
 begin
 	e1:=1;
 	e2:=2;
@@ -55,10 +56,12 @@ begin
 	Insertar(4,a1);
 	Insertar(2,a1);
 	Insertar(3,a1);
-	Insertar(4,a1);
+	Insertar(1,a1);
 	Insertar(6,a1);
 	Insertar(5,a1);
 	Insertar(7,a1);
+
+
 
 	imprimir(a1);
 

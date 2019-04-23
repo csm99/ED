@@ -290,13 +290,13 @@ type
 
 	procedure InsertarHijoIzq(hijo:tArbin; VAR a:tArbin);
 	begin
-		if (not EsVacio(a)) and (Profundidad(a) <= 2) then
+		if (not EsVacio(a)) and (Profundidad(a^.izq) <= 1) then
 			a^.izq:=hijo;
 	end;
 
 	procedure InsertarHijoDer(hijo:tArbin; VAR a:tArbin);
 	begin
-		if (not EsVacio(a)) and (Profundidad(a) <= 2) then
+		if (not EsVacio(a)) and (Profundidad(a^.der) <= 1) then
 			a^.der:=hijo;
 	end;
 
@@ -311,7 +311,7 @@ type
 		if EsVacio(a) then
 			EsHoja:=false
 		else
-			EsHoja:= (a^.izq = nil) and (a^.der = nil);
+			EsHoja:= ((a^.izq = nil) and (a^.der = nil));
 	end;
 
 	{ ------------------------------ }
@@ -326,7 +326,7 @@ type
 		CrearColaVacia(cAux);
 		CrearColaVacia(cAux2);
 		prof:=Profundidad(a);
-				writeln(prof);
+				//writeln(prof);
 		if not EsVacio(a) then begin
 			for i:=1 to prof do
 				write(' ');
