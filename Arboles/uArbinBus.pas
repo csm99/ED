@@ -1,6 +1,6 @@
 UNIT uArbinBus;
 INTERFACE
-	USES uElem, uArbolBinario;
+	USES uElem, uArbolBinario, uLista;
 	TYPE
 		tArbinBus = tArbin;
 
@@ -17,6 +17,7 @@ INTERFACE
 	function NumeroNodos(a:tArbinBus):integer;
 	function Compensado(a:tArbinBus):boolean;
 	function Equilibrado(a:tArbinBus):boolean;
+	procedure Preorden(a:tArbin; VAR l:tLista);
 	PROCEDURE Imprimir(a:tArbinBus);
 
 
@@ -131,6 +132,11 @@ IMPLEMENTATION
 	function Equilibrado(a:tArbinBus):boolean;
 	begin
 		Equilibrado:=uArbolBinario.Equilibrado(a);
+	end;
+
+	procedure Preorden(a:tArbin; VAR l:tLista);
+	begin
+		uArbolBinario.Preorden(a,l);
 	end;
 
 	PROCEDURE Imprimir(a:tArbinBus);

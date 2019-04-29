@@ -1,9 +1,10 @@
 PROGRAM PruebaArboles;
-USES uArbinBus, uElem;
+USES uArbinBus, uElem, uLista;
 VAR
 	a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13, aux, arbol1, arbol2, arbol3:tArbinBus;
 	e1,e2,e3,e4,e5,e6,e7:tElem;
 	i,j:integer;
+	l:tLista;
 begin
 	e1:=1;
 	e2:=2;
@@ -64,5 +65,6 @@ begin
 	imprimir(a1);
 
 
-
+	Preorden(a1, l);
+	ImprimirLista(l);
 end.

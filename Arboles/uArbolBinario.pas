@@ -1,6 +1,6 @@
 UNIT uArbolBinario;
 INTERFACE
-	USES uElem;
+	USES uElem, uLista;
 	TYPE
 	tArbin = ^tNodo;
 	tNodo = record
@@ -25,6 +25,7 @@ INTERFACE
 	procedure InsertarHijoIzq(hijo:tArbin; VAR a:tArbin);
 	procedure InsertarHijoDer(hijo:tArbin; VAR a:tArbin);
 	function EsHoja(a:tArbin):boolean;
+	procedure Preorden(a:tArbin; VAR l:tLista);
 	PROCEDURE Imprimir(a:tArbin);
 
 IMPLEMENTATION
@@ -205,7 +206,6 @@ type
 		encontrado:=False;
 		pAux:=a;
 		if not EsVacio(a) then begin
-		{while (not encontrado) and (pAux <> NIL) do begin}
 			if(Equals(e,pAux^.r))then
 				encontrado:=true
 			else
@@ -312,6 +312,23 @@ type
 			EsHoja:=false
 		else
 			EsHoja:= ((a^.izq = nil) and (a^.der = nil));
+	end;
+
+	procedure Preorden(a:tArbin; VAR l:tLista);
+	var
+		l1,l2, aux:tLista;
+	begin
+		CrearListaVacia(l1);
+		CrearListaVacia(l2);
+		CrearListaVacia(aux);
+		if EsVacio(a) then
+			CrearListaVacia(l)
+		else begin
+			Preorden(a^.izq, l1);
+			Preorden(a^.der, l2);
+			Concatenar(l1, l2, l);
+			ConstruirLista(a^.r, l);
+		end;
 	end;
 
 	{ ------------------------------ }
