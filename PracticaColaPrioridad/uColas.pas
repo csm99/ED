@@ -114,15 +114,15 @@ IMPLEMENTATION
 		pAux:tPtr;
 	begin
 		if(not EsVacia(c))then begin
-		pAux:=c.principio;
-		writeln('PRINCIPIO: ');
-		uElem.Mostrar(pAux^.e);
-		pAux:=pAux^.sig;
-		while(pAux <> NIL)do begin
-			Mostrar(pAux^.e);
+			pAux:=c.principio;
+			writeln('PRINCIPIO: ');
+			uElem.Mostrar(pAux^.e);
 			pAux:=pAux^.sig;
-		end;
-		writeln('FINAL.');
+			while(pAux <> NIL)do begin
+				Mostrar(pAux^.e);
+				pAux:=pAux^.sig;
+			end;
+			writeln('FINAL.');
 		end;
 	end;
 
