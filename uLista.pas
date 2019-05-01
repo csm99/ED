@@ -127,7 +127,7 @@ implementation
 			aux:=lista;
 			while((aux<>nil) and (aux^.e <> e))do
 				aux:=aux^.sig;
-			if(aux^.e = e)then
+			if(aux <> nil) and (aux^.e = e)then
 				Pertenece := true
 			else
 				Pertenece := false;

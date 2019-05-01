@@ -24,9 +24,9 @@ uses uElem;
 	function Longitud(lista:TLista):integer;
 	procedure Ultimo(lista:tLista; VAR e:TElem);
 	function Pertenece(lista:TLista; e:TElem):boolean;
-	function Peso(e:tElem):integer;
+	function Peso(e:tElem; lista:tLista):integer;
 	procedure Concatenar(l1, l2:tLista; VAR nuevaLista:tLista);
-	procedure InsertarFinal(e:tElem; VAR lista:tLista);
+	procedure InsertarFinal(e:tElem; VAR lista:tLista; peso:integer);
 	procedure ImprimirLista(lista:tLista);
 	procedure GetElemPos(lista:tLista; pos:integer; VAR e:tElem);
 	PROCEDURE Copiar(lista:tLista; VAR copia:tLista);
@@ -134,14 +134,14 @@ implementation
 			aux:=lista;
 			while((aux<>nil) and (aux^.e <> e))do
 				aux:=aux^.sig;
-			if(aux^.e = e)then
+			if (aux <> nil) and (aux^.e = e)then
 				Pertenece := true
 			else
 				Pertenece := false;
 		end;
 	end;
 
-	function Peso(e:tElem):integer;
+	function Peso(e:tElem; lista:tLista):integer;
 	var
 		aux:tLista;
 	begin
@@ -151,6 +151,7 @@ implementation
 				aux:=aux^.sig;
 			if(aux^.e = e)then
 				Peso:=aux^.peso;
+		end;
 	end;
 
 	procedure Concatenar(l1, l2:tLista; VAR nuevaLista:tLista);
@@ -177,7 +178,7 @@ implementation
 		aux,aux2:tLista;
 	begin
 		if(EsVacia(lista))then
-			ConstruirLista(e,lista,peso)
+			ConstruirLista(e,peso,lista)
 		else begin
 			aux:=lista;
 			while(aux^.sig <> nil) do
@@ -196,7 +197,7 @@ implementation
 	begin
 		aux:=lista;
 		while(aux <> nil)do begin
-			writeln(aux^.e , '(Peso ', aux^.peso, ')');
+			writeln(aux^.e);
 			aux:=aux^.sig;
 		end;
 	end;
@@ -222,7 +223,7 @@ implementation
 	begin
 		CrearListaVacia(copia);
 		WHILE lista <> nil DO BEGIN
-			InsertarFinal(lista^.e, copia);
+			InsertarFinal(lista^.e, copia, lista^.peso);
 			lista:=lista^.sig;
 		END;
 	end;

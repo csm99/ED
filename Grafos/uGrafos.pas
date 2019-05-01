@@ -19,6 +19,7 @@ uses uElem, uLista;
 		function EsVacio(g:tGrafo):boolean;
 		function ContainsDestinos(e, origen:tElem; g:tGrafo):boolean;
 		procedure GetListaAdyacencia(e:tElem; g:tGrafo; var l:tLista);
+		procedure ImprimirGrafo(g:tGrafo);
 
 
 implementation
@@ -32,22 +33,26 @@ implementation
 	var
 		nuevoNodo:tGrafo;
 	begin
-		new(nuevoNodo);
-		Asignar(nuevoNodo^.e, origen);
-		uLista.CrearListaVacia(nuevoNodo^.lista);
-		nuevoNodo^.sig:=g;
-		g:=nuevoNodo;
+		if not Contains(origen, g) then begin
+			new(nuevoNodo);
+			Asignar(nuevoNodo^.e, origen);
+			uLista.CrearListaVacia(nuevoNodo^.lista);
+			nuevoNodo^.sig:=g;
+			g:=nuevoNodo;
+		end;
 	end;
 
 	procedure InsertarDestino(destino:tElem; origen:tElem; peso:integer; var g:tGrafo);
 	var
 		aux:tGrafo;
 	begin
-		aux:=g;
-		while (aux <> nil) and (not Equals(aux^.e, origen)) do
-			aux:=aux^.sig;
-		if (aux <> nil) then
-			uLista.ConstruirLista(destino, peso, aux^.lista);
+		if not ContainsDestinos(destino, origen, g) then begin
+			aux:=g;
+			while (aux <> nil) and (not Equals(aux^.e, origen)) do
+				aux:=aux^.sig;
+			if (aux <> nil) then
+				uLista.ConstruirLista(destino, peso, aux^.lista);
+		end;
 	end;
 
 	function Contains(e:tElem; g:tGrafo):boolean;
@@ -103,7 +108,17 @@ implementation
 		end;
 	end;
 
-
+	procedure ImprimirGrafo(g:tGrafo);
+	begin
+		while g <> nil do begin
+			writeln('***');
+			write('Or: ');
+			uElem.Mostrar(g^.e);
+			uLista.ImprimirLista(g^.lista);
+			writeln('***');
+			g:=g^.sig;
+		end;
+	end;
 
 
 end.
