@@ -1,7 +1,7 @@
 unit uGrafos;
 
 interface
-uses uElem, uLista;
+uses uElem, uLista, uConjuntos3, uPila;
 
 	type
 		tNodo = record
@@ -14,13 +14,14 @@ uses uElem, uLista;
 
 		procedure CrearGrafoVacio(var g:tGrafo);
 		procedure InsertarOrigen(origen:tElem; var g:tGrafo);
-		procedure InsertarDestino(destino:tElem; origen:tElem; peso:integer; var g:tGrafo);
+		procedure InsertarDestino(destino:tElem; origen:tElem; var g:tGrafo);
 		function Contains(e:tElem; g:tGrafo):boolean;
 		function EsVacio(g:tGrafo):boolean;
 		function ContainsDestinos(e, origen:tElem; g:tGrafo):boolean;
 		procedure GetListaAdyacencia(e:tElem; g:tGrafo; var l:tLista);
 		procedure ImprimirGrafo(g:tGrafo);
-
+		procedure RecorridoAnchura(g:tGrafo; origen:tElem; var l:tLista);
+		FUNCTION Tamano(g:tGrafo):integer;
 
 implementation
 
@@ -42,7 +43,7 @@ implementation
 		end;
 	end;
 
-	procedure InsertarDestino(destino:tElem; origen:tElem; peso:integer; var g:tGrafo);
+	procedure InsertarDestino(destino:tElem; origen:tElem; var g:tGrafo);
 	var
 		aux:tGrafo;
 	begin
@@ -51,13 +52,11 @@ implementation
 			while (aux <> nil) and (not Equals(aux^.e, origen)) do
 				aux:=aux^.sig;
 			if (aux <> nil) then
-				uLista.ConstruirLista(destino, peso, aux^.lista);
+				uLista.ConstruirLista(destino, aux^.lista);
 		end;
 	end;
 
 	function Contains(e:tElem; g:tGrafo):boolean;
-	var
-		esta:boolean;
 	begin
 		if EsVacio(g) then
 			Contains:=false
@@ -109,14 +108,78 @@ implementation
 	end;
 
 	procedure ImprimirGrafo(g:tGrafo);
+	var
+		i:integer;
 	begin
+		i:=1;
 		while g <> nil do begin
 			writeln('***');
-			write('Or: ');
+			write('OR: ');
 			uElem.Mostrar(g^.e);
+			writeln(i);
+			i:=i+1;
 			uLista.ImprimirLista(g^.lista);
 			writeln('***');
 			g:=g^.sig;
+		end;
+	end;
+
+	FUNCTION Tamano(g:tGrafo):integer;
+	BEGIN
+		if(EsVacio(g))then
+			Tamano:=0
+		else
+			Tamano:= 1 + Tamano(g^.sig);;
+	END;
+
+	procedure RecorridoAnchura(g:tGrafo; origen:tElem; var l:tLista);
+	var
+		pila:tPila;
+		visitados:tConjunto;
+		aux:tGrafo;
+		e:tElem;
+		adyacentes:tLista;
+	begin
+		if Contains(origen, g) then begin
+			aux:=g;
+			while not Equals(origen, aux^.e) do
+				aux:=aux^.sig;
+			CrearPilaVacia(pila);
+			CrearConjuntoVacio(visitados);
+			CrearListaVacia(l);
+			Asignar(e, origen);
+			Apilar(e, pila);
+			while (not uPila.EsVacia(pila)) do begin
+				if (not Pertenece(e, visitados)) then begin
+					Desapilar(pila);
+					Poner(e, visitados);
+					ConstruirLista(e, l);
+					GetListaAdyacencia(e, g, adyacentes);
+					while not EsVacia(adyacentes) do begin
+						uLista.PrimerElemento(adyacentes, e);
+						Apilar(e, pila);
+						uLista.Resto(adyacentes, adyacentes);
+					end;
+					Cima(e, pila);
+				end
+				else begin
+					Desapilar(pila);
+					Cima(e, pila);
+				end;
+(*
+				writeln();
+				writeln('Pila:');
+				ImprimirPila(pila);
+				writeln();
+				writeln('Conjunto:');
+				ImprimirConjunto(visitados);
+				writeln();
+				writeln('Lista:');
+				ImprimirLista(l);
+				writeln(uLista.Longitud(l));
+				writeln();
+				*)
+			end;
 		end;
 	end;
 

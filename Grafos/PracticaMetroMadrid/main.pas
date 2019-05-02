@@ -1,7 +1,8 @@
 program main;
-uses uGrafos, uElem;
+uses uGrafos, uElem, uLista;
 var
 	g:tGrafo;
+	l:tLista;
 
 	procedure InsertarLinea(fichero:string; var g:tGrafo);
 	var
@@ -9,29 +10,38 @@ var
 		ant, act, pos:string;
 		o, d1, d2:tElem;
 		e:tElem;
+		i:integer;
 	begin
+		i:=0;
 		assign(f,fichero);
 		reset(f);
 		if not eof(f) then begin
 			readln(f, ant);
 			readln(f, act);
+			i:=i+2;
 			uElem.CrearElem(ant, o);
 			uElem.CrearElem(act, d1);
 			uGrafos.InsertarOrigen(o, g);
-			uGrafos.InsertarDestino(d1, o, 0, g);
+			uGrafos.InsertarDestino(d1, o, g);
 		end;
 		while not eof(f) do begin
 			readln(f, pos);
+			i:=i+1;
 			uElem.CrearElem(act, o);
 			uElem.CrearElem(ant, d1);
 			uElem.CrearElem(pos, d2);
 			uGrafos.InsertarOrigen(o, g);
-			uGrafos.InsertarDestino(d1, o, 0, g); // el 0 es pq el grafo esta implementado con pesos
-			uGrafos.InsertarDestino(d2, o, 0, g);
+			uGrafos.InsertarDestino(d1, o, g); // el 0 es pq el grafo esta implementado con pesos
+			uGrafos.InsertarDestino(d2, o, g);
 			ant:=act;
 			act:=pos;
 		end;
+		uElem.CrearElem(act, o);
+		uElem.CrearElem(ant, d1);
+		uGrafos.InsertarOrigen(o, g);
+		uGrafos.InsertarDestino(d1, o, g);
 		close(f);
+		writeln(i);
 	end;
 
 
@@ -52,5 +62,10 @@ begin
 	InsertarLinea('L12.txt', g);
 
 	ImprimirGrafo(g);
+	CrearListaVacia(l);
+	RecorridoAnchura(g, 'Sol', l);
+	uLista.ImprimirLista(l);
+	writeln(uLista.Longitud(l));
+	writeln(Tamano(g));
 
 end.
