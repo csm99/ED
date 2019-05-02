@@ -63,7 +63,7 @@ begin
 
 	ImprimirGrafo(g);
 	CrearListaVacia(l);
-	RecorridoAnchura(g, 'Sol', l);
+	Camino('Conservatorio', 'Sol', g, l);
 	uLista.ImprimirLista(l);
 	writeln(uLista.Longitud(l));
 	writeln(Tamano(g));

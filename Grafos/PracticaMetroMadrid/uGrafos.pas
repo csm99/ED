@@ -22,6 +22,7 @@ uses uElem, uLista, uConjuntos3, uPila;
 		procedure ImprimirGrafo(g:tGrafo);
 		procedure RecorridoAnchura(g:tGrafo; origen:tElem; var l:tLista);
 		FUNCTION Tamano(g:tGrafo):integer;
+		procedure Camino(origen, destino:tElem; g:tGrafo; var l:tLista);
 
 implementation
 
@@ -179,6 +180,44 @@ implementation
 				writeln(uLista.Longitud(l));
 				writeln();
 				*)
+			end;
+		end;
+	end;
+
+	procedure Camino(origen, destino:tElem; g:tGrafo; var l:tLista);
+	var
+		pila:tPila;
+		visitados:tConjunto;
+		aux:tGrafo;
+		e:tElem;
+		adyacentes:tLista;
+	begin
+		if Contains(origen, g) and Contains(destino, g) then begin
+			aux:=g;
+			while not Equals(origen, aux^.e) do
+				aux:=aux^.sig;
+			CrearPilaVacia(pila);
+			CrearConjuntoVacio(visitados);
+			CrearListaVacia(l);
+			Asignar(e, origen);
+			Apilar(e, pila);
+			while (not uPila.EsVacia(pila)) and (not Pertenece(destino, visitados)) do begin
+				if (not Pertenece(e, visitados)) then begin
+					Desapilar(pila);
+					Poner(e, visitados);
+					InsertarFinal(e, l);
+					GetListaAdyacencia(e, g, adyacentes);
+					while not EsVacia(adyacentes) do begin
+						uLista.PrimerElemento(adyacentes, e);
+						Apilar(e, pila);
+						uLista.Resto(adyacentes, adyacentes);
+					end;
+					Cima(e, pila);
+				end
+				else begin
+					Desapilar(pila);
+					Cima(e, pila);
+				end;
 			end;
 		end;
 	end;
