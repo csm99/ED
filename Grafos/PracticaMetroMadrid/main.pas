@@ -2,7 +2,7 @@ program main;
 uses uGrafos, uElem, uLista;
 var
 	g:tGrafo;
-	l:tLista;
+	l,l2:tLista;
 
 	procedure InsertarLinea(fichero:string; var g:tGrafo);
 	var
@@ -63,9 +63,13 @@ begin
 
 	ImprimirGrafo(g);
 	CrearListaVacia(l);
-	Camino('Conservatorio', 'Sol', g, l);
+	RecorridoAnchura(g, 'La Elipa', l);
+	RecorridoProfundidad(g, 'La Elipa', l2);
+	//Camino('Conservatorio', 'Sol', g, l);
 	uLista.ImprimirLista(l);
-	writeln(uLista.Longitud(l));
-	writeln(Tamano(g));
+	writeln('*******');
+	uLista.ImprimirLista(l2);
+	//writeln(uLista.Longitud(l));
+	//writeln(Tamano(g));
 
 end.

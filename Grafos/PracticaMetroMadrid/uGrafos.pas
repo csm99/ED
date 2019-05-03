@@ -1,7 +1,7 @@
 unit uGrafos;
 
 interface
-uses uElem, uLista, uConjuntos3, uPila;
+uses uElem, uLista, uConjuntos3, uPila, uColas;
 
 	type
 		tNodo = record
@@ -20,7 +20,8 @@ uses uElem, uLista, uConjuntos3, uPila;
 		function ContainsDestinos(e, origen:tElem; g:tGrafo):boolean;
 		procedure GetListaAdyacencia(e:tElem; g:tGrafo; var l:tLista);
 		procedure ImprimirGrafo(g:tGrafo);
-		procedure RecorridoAnchura(g:tGrafo; origen:tElem; var l:tLista);
+		procedure RecorridoProfundidad(g:tGrafo; origen:tElem; var l:tLista);
+		PROCEDURE RecorridoAnchura(g: TGrafo; origen: TElem; VAR l:TLista);
 		FUNCTION Tamano(g:tGrafo):integer;
 		procedure Camino(origen, destino:tElem; g:tGrafo; var l:tLista);
 
@@ -133,7 +134,7 @@ implementation
 			Tamano:= 1 + Tamano(g^.sig);;
 	END;
 
-	procedure RecorridoAnchura(g:tGrafo; origen:tElem; var l:tLista);
+	procedure RecorridoProfundidad(g:tGrafo; origen:tElem; var l:tLista);
 	var
 		pila:tPila;
 		visitados:tConjunto;
@@ -156,7 +157,7 @@ implementation
 					Poner(e, visitados);
 					ConstruirLista(e, l);
 					GetListaAdyacencia(e, g, adyacentes);
-					while not EsVacia(adyacentes) do begin
+					while not uLista.EsVacia(adyacentes) do begin
 						uLista.PrimerElemento(adyacentes, e);
 						Apilar(e, pila);
 						uLista.Resto(adyacentes, adyacentes);
@@ -207,7 +208,7 @@ implementation
 					Poner(e, visitados);
 					InsertarFinal(e, l);
 					GetListaAdyacencia(e, g, adyacentes);
-					while not EsVacia(adyacentes) do begin
+					while not uLista.EsVacia(adyacentes) do begin
 						uLista.PrimerElemento(adyacentes, e);
 						Apilar(e, pila);
 						uLista.Resto(adyacentes, adyacentes);
@@ -221,6 +222,41 @@ implementation
 			end;
 		end;
 	end;
+
+	PROCEDURE RecorridoAnchura(g: TGrafo; origen: TElem; VAR l:TLista);
+	VAR
+		c: tCola;
+		visitados: TConjunto;
+		aux: TGrafo;
+		e: TElem;
+		adyacentes: TLista;
+	BEGIN
+		IF uGrafos.Contains(origen, g) THEN BEGIN
+			uLista.CrearListaVacia (l);
+			uConjuntos3.CrearConjuntoVacio(visitados);
+			uColas.CrearColaVacia(c);
+			uElem.Asignar(e, origen);
+			uColas.Insertar(e,c);
+			WHILE NOT uColas.EsVacia(c) DO BEGIN
+				IF NOT uConjuntos3.Pertenece(e, visitados) THEN BEGIN
+					uColas.Eliminar(c);
+					uConjuntos3.Poner(e, visitados);
+					uLista.ConstruirLista(e, l);
+					GetListaAdyacencia(e, g, adyacentes);
+					WHILE NOT uLista.EsVacia(adyacentes) DO BEGIN
+						uLista.PrimerElemento(adyacentes, e);
+						uColas.Insertar(e,c);
+						uLista.Resto(adyacentes, adyacentes);
+					END;
+					uColas.Primero(e,c);
+				END
+				ELSE BEGIN
+					uColas.Eliminar(c);
+					uColas.Primero(e,c);
+				END;
+			END;
+		END;
+	END;
 
 
 end.
