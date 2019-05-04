@@ -138,14 +138,10 @@ implementation
 	var
 		pila:tPila;
 		visitados:tConjunto;
-		aux:tGrafo;
 		e:tElem;
 		adyacentes:tLista;
 	begin
 		if Contains(origen, g) then begin
-			aux:=g;
-			while not Equals(origen, aux^.e) do
-				aux:=aux^.sig;
 			CrearPilaVacia(pila);
 			CrearConjuntoVacio(visitados);
 			CrearListaVacia(l);
@@ -189,14 +185,10 @@ implementation
 	var
 		pila:tPila;
 		visitados:tConjunto;
-		aux:tGrafo;
 		e:tElem;
 		adyacentes:tLista;
 	begin
 		if Contains(origen, g) and Contains(destino, g) then begin
-			aux:=g;
-			while not Equals(origen, aux^.e) do
-				aux:=aux^.sig;
 			CrearPilaVacia(pila);
 			CrearConjuntoVacio(visitados);
 			CrearListaVacia(l);
