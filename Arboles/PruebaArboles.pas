@@ -64,7 +64,8 @@ begin
 
 	imprimir(a1);
 
+	EliminarElemento(6,a1);
 
-	Preorden(a1, l);
-	ImprimirLista(l);
+	imprimir(a1);
+
 end.

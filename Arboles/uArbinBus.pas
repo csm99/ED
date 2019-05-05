@@ -18,6 +18,7 @@ INTERFACE
 	function Compensado(a:tArbinBus):boolean;
 	function Equilibrado(a:tArbinBus):boolean;
 	procedure Preorden(a:tArbin; VAR l:tLista);
+	procedure EliminarElemento(e:tElem; var a:tArbinBus);
 	PROCEDURE Imprimir(a:tArbinBus);
 
 
@@ -143,4 +144,13 @@ IMPLEMENTATION
 	begin
 		uArbolBinario.Imprimir(a);
 	end;
+
+	procedure EliminarElemento(e:tElem; var a:tArbinBus);
+	var
+		r:tElem;
+		aux,hd,hi:tArbinBus;
+	begin
+		uArbolBinario.EliminarElemento(e,a);
+	end;
+
 end.

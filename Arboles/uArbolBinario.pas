@@ -26,6 +26,7 @@ INTERFACE
 	procedure InsertarHijoDer(hijo:tArbin; VAR a:tArbin);
 	function EsHoja(a:tArbin):boolean;
 	procedure Preorden(a:tArbin; VAR l:tLista);
+	procedure EliminarElemento(e:tElem; var a:tArbin);
 	PROCEDURE Imprimir(a:tArbin);
 
 IMPLEMENTATION
@@ -331,6 +332,49 @@ type
 		end;
 	end;
 
+	procedure EliminarElemento(e:tElem; var a:tArbin);
+	var
+		r:tElem;
+		der, aux:tArbin;
+	begin
+		if not EsVacio(a) then begin
+			if Equals(a^.r, e) then begin
+				if(not EsVacio(a^.izq) and not EsVacio(a^.der))then begin
+					der:=a^.der;
+					aux:=a^.izq; // la nueva raiz es el hijo izquierdo
+					Dispose(a);
+					a:=aux;
+					aux:=a^.der;
+					if EsVacio(a^.der) then
+						a^.der:=der
+					else begin
+						while (not EsVacio(aux)) and (not EsHoja(aux)) do
+							aux:=aux^.der;
+						if not EsVacio(aux) then
+							aux^.der:=der;
+					end;
+				end
+				else if EsVacio(a^.izq) then begin
+					aux:=a^.der;
+					Dispose(a);
+					a:=aux;
+				end
+				else begin
+					aux:=a^.izq;
+					Dispose(a);
+					a:=aux;
+				end;
+			end
+			else begin
+				EliminarElemento(e, a^.izq);
+				EliminarElemento(e, a^.der);
+			end;
+		end;
+	end;
+
+
+
+
 	{ ------------------------------ }
 
 
@@ -406,6 +450,8 @@ type
 
 		end;
 	end;
+
+
 
 
 
